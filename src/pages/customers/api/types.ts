@@ -23,6 +23,9 @@ export interface User {
   };
 }
 
-export type GetUsersRequestInterface = Record<string, never>;
+export interface GetUsersRequestInterface {
+  limit?: number;
+  skip?: number;
+}
 
 export type GetUsersResponseInterface = User[];

@@ -12,6 +12,8 @@ export const ENDPOINTS = {
     BASE: "/posts",
     LIST: "/posts",
     DETAIL: (id: number | string) => `/posts/${id}`,
+    UPDATE: (id: number | string) => `/posts/${id}`,
+    DELETE: (id: number | string) => `/posts/${id}`,
     COMMENTS: (postId: number | string) => `/posts/${postId}/comments`,
   },
   COMMENTS: {

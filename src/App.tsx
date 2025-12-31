@@ -1,10 +1,10 @@
-import CustomersPage from "./pages/customers";
+import PostsPage from "./pages/posts";
 import "./App.css";
 
 function App() {
   return (
     <div>
-      <CustomersPage />
+      <PostsPage />
     </div>
   );
 }

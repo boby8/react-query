@@ -1,10 +1,10 @@
-import PostsPage from "./pages/posts";
 import "./App.css";
+import { CustomerForm } from "./pages/form";
 
 function App() {
   return (
     <div>
-      <PostsPage />
+      <CustomerForm />
     </div>
   );
 }

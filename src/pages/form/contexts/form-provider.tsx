@@ -24,6 +24,7 @@ export function FormProvider({ initialData, onSubmitData, children }: FormProvid
     control,
     reset,
     setValue,
+    getValues,
     formState: { isDirty, isSubmitting, dirtyFields },
   } = useForm<CustomerFormValues>({
     resolver: zodResolver(customerSchema),
@@ -78,27 +79,52 @@ export function FormProvider({ initialData, onSubmitData, children }: FormProvid
   }, [country, state]);
 
   /* ------------------ AUTO POPULATE ADDRESS HELPERS ------------------ */
-  const autoPopulateAddress = (countryValue: string) => {
+  /**
+   * Returns default state and city for a given country.
+   * Uses the first available state and its first city from constants.
+   */
+  const getDefaultAddressForCountry = (countryValue: string): { state: string; city: string } => {
+    const states = stateOptions[countryValue as keyof typeof stateOptions];
+    if (!states || states.length === 0) {
+      return { state: "", city: "" };
+    }
+
+    const defaultState = states[0].value;
+
+    // Type-safe access to city options based on country
+    let stateCities: Array<{ value: string; label: string }> | undefined;
     if (countryValue === "IN") {
-      setValue("state", "UP", { shouldDirty: false });
-      setValue("city", "Lucknow", { shouldDirty: false });
+      stateCities = cityOptions.IN[defaultState as keyof typeof cityOptions.IN];
     } else if (countryValue === "US") {
-      setValue("state", "CA", { shouldDirty: false });
-      setValue("city", "Los Angeles", { shouldDirty: false });
+      stateCities = cityOptions.US[defaultState as keyof typeof cityOptions.US];
+    }
+
+    const defaultCity = stateCities && stateCities.length > 0 ? stateCities[0].value : "";
+
+    return { state: defaultState, city: defaultCity };
+  };
+
+  const autoPopulateAddress = (countryValue: string) => {
+    const { state, city } = getDefaultAddressForCountry(countryValue);
+    if (state) {
+      setValue("state", state, { shouldDirty: false });
+    }
+    if (city) {
+      setValue("city", city, { shouldDirty: false });
     }
   };
 
   const autoPopulateCity = (countryValue: string, stateValue: string) => {
+    // Type-safe access to city options based on country
+    let stateCities: Array<{ value: string; label: string }> | undefined;
     if (countryValue === "IN") {
-      const cities = cityOptions.IN[stateValue as keyof typeof cityOptions.IN];
-      if (cities && cities.length > 0) {
-        setValue("city", cities[0].value, { shouldDirty: false });
-      }
+      stateCities = cityOptions.IN[stateValue as keyof typeof cityOptions.IN];
     } else if (countryValue === "US") {
-      const cities = cityOptions.US[stateValue as keyof typeof cityOptions.US];
-      if (cities && cities.length > 0) {
-        setValue("city", cities[0].value, { shouldDirty: false });
-      }
+      stateCities = cityOptions.US[stateValue as keyof typeof cityOptions.US];
+    }
+
+    if (stateCities && stateCities.length > 0) {
+      setValue("city", stateCities[0].value, { shouldDirty: false });
     }
   };
 
@@ -210,9 +236,20 @@ export function FormProvider({ initialData, onSubmitData, children }: FormProvid
 
   const handleAddressConfirm = () => {
     if (pendingCountry) {
-      setValue("country", pendingCountry, { shouldDirty: false });
-      // Clear address dirty state by resetting state and city
-      autoPopulateAddress(pendingCountry);
+      const currentValues = getValues();
+      const { state: newState, city: newCity } = getDefaultAddressForCountry(pendingCountry);
+
+      // Reset form with updated address values - this clears dirty state
+      reset(
+        {
+          ...currentValues,
+          country: pendingCountry,
+          state: newState,
+          city: newCity,
+        },
+        { keepDefaultValues: false }
+      );
+
       setShowAddressConfirm(false);
       setPendingCountry("");
     }

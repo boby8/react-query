@@ -1,1 +1,1 @@
-export { default as CustomerForm } from "./customer-form";
+export { default as CustomerForm } from "./ui/customer-form";

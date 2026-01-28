@@ -51,18 +51,14 @@ export function AdminSupport() {
 
   return (
     <Paper elevation={2} sx={adminPaperStyles}>
-      <Typography sx={adminTitleStyles}>
-        {formStrings.adminSupport}
-      </Typography>
+      <Typography sx={adminTitleStyles}>{formStrings.adminSupport}</Typography>
       <Divider sx={adminDividerStyles} />
 
       <Box display="flex" flexDirection="column" gap={3}>
         {/* Customer Details Section */}
         {selectedCustomerId && (
           <Box>
-            <Typography sx={customerSectionTitleStyles}>
-              {formStrings.customerSection}
-            </Typography>
+            <Typography sx={customerSectionTitleStyles}>{formStrings.customerSection}</Typography>
             <Divider sx={customerSectionDividerStyles} />
 
             {isAdminCustomerDirty && (
@@ -74,16 +70,17 @@ export function AdminSupport() {
             )}
 
             <Box sx={customerDetailsBoxStyles}>
-              <Typography sx={customerDetailsTitleStyles}>
-                {formStrings.customerDetails}
-              </Typography>
+              <Typography sx={customerDetailsTitleStyles}>{formStrings.customerDetails}</Typography>
               <Box sx={customerDetailsFieldsContainerStyles}>
                 <Box sx={customerDetailsRowStyles}>
                   <TextField
                     label={formStrings.name}
                     value={adminCustomerDetails.name}
                     onChange={(e) => {
-                      onAdminCustomerDetailsChange({ ...adminCustomerDetails, name: e.target.value });
+                      onAdminCustomerDetailsChange({
+                        ...adminCustomerDetails,
+                        name: e.target.value,
+                      });
                     }}
                     fullWidth
                     size="small"
@@ -107,7 +104,10 @@ export function AdminSupport() {
                     label={formStrings.deviceBought}
                     value={adminCustomerDetails.device}
                     onChange={(e) => {
-                      onAdminCustomerDetailsChange({ ...adminCustomerDetails, device: e.target.value });
+                      onAdminCustomerDetailsChange({
+                        ...adminCustomerDetails,
+                        device: e.target.value,
+                      });
                     }}
                     fullWidth
                     size="small"
@@ -117,7 +117,10 @@ export function AdminSupport() {
                     type="email"
                     value={adminCustomerDetails.email}
                     onChange={(e) => {
-                      onAdminCustomerDetailsChange({ ...adminCustomerDetails, email: e.target.value });
+                      onAdminCustomerDetailsChange({
+                        ...adminCustomerDetails,
+                        email: e.target.value,
+                      });
                     }}
                     fullWidth
                     size="small"
@@ -127,14 +130,13 @@ export function AdminSupport() {
 
               {/* Money to Take */}
               <Box sx={moneyBoxStyles}>
-                <Typography sx={moneyTitleStyles}>
-                  {formStrings.moneyToTake}
-                </Typography>
+                <Typography sx={moneyTitleStyles}>{formStrings.moneyToTake}</Typography>
                 <Typography sx={moneyAmountStyles}>
                   ₹{moneyToTake.toLocaleString("en-IN")}
                 </Typography>
                 <Typography sx={moneyBreakdownStyles}>
-                  {formStrings.baseAmount}: ₹{baseAmount.toLocaleString("en-IN")} × {formStrings.quantity}: {estimatedQuantity}
+                  {formStrings.baseAmount}: ₹{baseAmount.toLocaleString("en-IN")} ×{" "}
+                  {formStrings.quantity}: {estimatedQuantity}
                 </Typography>
               </Box>
             </Box>
@@ -143,9 +145,7 @@ export function AdminSupport() {
 
         {/* Form Status */}
         <Box>
-          <Typography sx={statusSectionTitleStyles}>
-            {formStrings.formStatus}
-          </Typography>
+          <Typography sx={statusSectionTitleStyles}>{formStrings.formStatus}</Typography>
           <Typography sx={statusTextStyles}>
             {isDirty === true ? (
               <Box component="span" sx={statusWarningStyles}>
@@ -167,11 +167,17 @@ export function AdminSupport() {
           <Typography sx={statusTextStyles}>
             {country ? (
               <>
-                {formStrings.country}: <strong>{countryOptions.find((opt) => opt.value === country)?.label || country}</strong>
+                {formStrings.country}:{" "}
+                <strong>
+                  {countryOptions.find((opt) => opt.value === country)?.label || country}
+                </strong>
                 {state && (
                   <>
                     <br />
-                    {formStrings.state}: <strong>{currentStateOptions.find((opt) => opt.value === state)?.label || state}</strong>
+                    {formStrings.state}:{" "}
+                    <strong>
+                      {currentStateOptions.find((opt) => opt.value === state)?.label || state}
+                    </strong>
                   </>
                 )}
                 {isAddressDirty && (
@@ -188,9 +194,7 @@ export function AdminSupport() {
 
         {/* Contact Count */}
         <Box>
-          <Typography sx={statusSectionTitleStyles}>
-            {formStrings.contactCount}
-          </Typography>
+          <Typography sx={statusSectionTitleStyles}>{formStrings.contactCount}</Typography>
           <Typography sx={statusTextStyles}>
             {contacts?.length || 0} {formStrings.contactsAdded}
           </Typography>
